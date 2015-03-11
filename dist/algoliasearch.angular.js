@@ -2014,11 +2014,18 @@ AlgoliaSearch.prototype.Index.prototype = {
           facets.push(facet);
         }
       }
+
+      var numericFilters = [];
+
+      for (i = 0; i < this.numericsRefinements.length; i++)
+        numericFilters.push(this.numericsRefinements[i].attribute + this.numericsRefinements[i].operator + this.numericsRefinements[i].value);
+
       return extend({}, {
         hitsPerPage: this.options.hitsPerPage,
         page: this.page,
         facets: facets,
-        facetFilters: this._getFacetFilters()
+        facetFilters: this._getFacetFilters(),
+        numericFilters: numericFilters
       }, this.searchParams);
     },
 
