@@ -71,6 +71,7 @@
       this.refinements = {};
       this.excludes = {};
       this.disjunctiveRefinements = {};
+      this.numericsRefinements = [];
       this.extraQueries = [];
     },
 
@@ -97,6 +98,14 @@
     clearRefinements: function() {
       this.disjunctiveRefinements = {};
       this.refinements = {};
+    },
+
+    clearNumericRefinements: function () {
+      this.numericsRefinements = [];
+    },
+
+    addNumericsRefine: function (attribute, operator, value) {
+      this.numericsRefinements.push({ attribute: attribute, operator: operator, value: value });
     },
 
     /**
@@ -438,6 +447,13 @@
      * @return {hash}
      */
     _getDisjunctiveFacetSearchParams: function(facet) {
+
+      var numericFilters = [];
+
+      for (i = 0; i < this.numericsRefinements.length; i++)
+        if (this.numericsRefinements[i].attribute != facet)
+          numericFilters.push(this.numericsRefinements[i].attribute + this.numericsRefinements[i].operator + this.numericsRefinements[i].value);
+
       return extend({}, this.searchParams, {
         hitsPerPage: 1,
         page: 0,
@@ -445,7 +461,8 @@
         attributesToHighlight: [],
         attributesToSnippet: [],
         facets: facet,
-        facetFilters: this._getFacetFilters(facet)
+        facetFilters: this._getFacetFilters(facet),
+        numericFilters: numericFilters
       });
     },
 
@@ -453,6 +470,12 @@
      * Test if there are some disjunctive refinements on the facet
      */
     _hasDisjunctiveRefinements: function(facet) {
+
+      for (var i = 0; i < this.numericsRefinements.length; i++) {
+        if (this.numericsRefinements[i].attribute === facet)
+          return true;
+      }
+
       for (var value in this.disjunctiveRefinements[facet]) {
         if (this.disjunctiveRefinements[facet][value]) {
           return true;
