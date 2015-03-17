@@ -1685,7 +1685,7 @@ AlgoliaSearch.prototype.Index.prototype = {
       this.numericsRefinements = [];
     },
 
-    addNumericsRefine: function(attribute, operator, value) {
+    addNumericRefine: function(attribute, operator, value) {
       this.numericsRefinements.push({ attribute: attribute, operator: operator, value: value });
     },
 
