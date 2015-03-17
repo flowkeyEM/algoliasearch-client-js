@@ -1942,7 +1942,7 @@ AlgoliaSearch.prototype.Index.prototype = {
         }
         var aggregatedAnswer = content.results[0];
         aggregatedAnswer.disjunctiveFacets = aggregatedAnswer.disjunctiveFacets || {};
-        aggregatedAnswer.facetStats = aggregatedAnswer.facetStats || {};
+        aggregatedAnswer.facets_stats = aggregatedAnswer.facets_stats || {};
         // create disjunctive facets from facets (disjunctive facets without refinements)
         for (var facet in unusedDisjunctiveFacets) {
           if (aggregatedAnswer.facets[facet] && !aggregatedAnswer.disjunctiveFacets[facet]) {
@@ -1969,9 +1969,13 @@ AlgoliaSearch.prototype.Index.prototype = {
           }
           // aggregate the disjunctive facets stats
           for (var stats in content.results[i + 1].facets_stats) {
-            aggregatedAnswer.facetStats[stats] = content.results[i + 1].facets_stats[stats];
+            aggregatedAnswer.facets_stats[stats] = content.results[i + 1].facets_stats[stats];
           }
         }
+
+        // Backward compatibility
+        aggregatedAnswer.facetStats = aggregatedAnswer.facets_stats;
+
         // add the excludes
         for (var exclude in self.excludes) {
           if (self.excludes[exclude]) {
@@ -2050,7 +2054,8 @@ AlgoliaSearch.prototype.Index.prototype = {
         attributesToSnippet: [],
         facets: facet,
         facetFilters: this._getFacetFilters(facet),
-        numericFilters: numericFilters
+        numericFilters: numericFilters,
+        analytics: false
       });
     },
 
