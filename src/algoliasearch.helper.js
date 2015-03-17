@@ -100,11 +100,11 @@
       this.refinements = {};
     },
 
-    clearNumericRefinements: function () {
+    clearNumericRefinements: function() {
       this.numericsRefinements = [];
     },
 
-    addNumericsRefine: function (attribute, operator, value) {
+    addNumericsRefine: function(attribute, operator, value) {
       this.numericsRefinements.push({ attribute: attribute, operator: operator, value: value });
     },
 
@@ -439,9 +439,9 @@
       }
 
       var numericFilters = [];
-
-      for (i = 0; i < this.numericsRefinements.length; i++)
+      for (i = 0; i < this.numericsRefinements.length; i++) {
         numericFilters.push(this.numericsRefinements[i].attribute + this.numericsRefinements[i].operator + this.numericsRefinements[i].value);
+      }
 
       return extend({}, {
         hitsPerPage: this.options.hitsPerPage,
@@ -460,10 +460,11 @@
     _getDisjunctiveFacetSearchParams: function(facet) {
 
       var numericFilters = [];
-
-      for (i = 0; i < this.numericsRefinements.length; i++)
-        if (this.numericsRefinements[i].attribute != facet)
+      for (i = 0; i < this.numericsRefinements.length; i++) {
+        if (this.numericsRefinements[i].attribute !== facet) {
           numericFilters.push(this.numericsRefinements[i].attribute + this.numericsRefinements[i].operator + this.numericsRefinements[i].value);
+        }
+      }
 
       return extend({}, this.searchParams, {
         hitsPerPage: 1,
@@ -482,12 +483,11 @@
      * Test if there are some disjunctive refinements on the facet
      */
     _hasDisjunctiveRefinements: function(facet) {
-
       for (var i = 0; i < this.numericsRefinements.length; i++) {
-        if (this.numericsRefinements[i].attribute === facet)
+        if (this.numericsRefinements[i].attribute === facet) {
           return true;
+        }
       }
-
       for (var value in this.disjunctiveRefinements[facet]) {
         if (this.disjunctiveRefinements[facet][value]) {
           return true;
